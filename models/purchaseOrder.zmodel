@@ -1,0 +1,19 @@
+
+ import "./organization.zmodel"  
+ import "./warehouse.zmodel"  
+ import "./purchaseOrderItem.zmodel"  
+
+model PurchaseOrder {
+
+    id        String    @id @default(uuid())  
+    status    String?      
+    organizationId String?      
+    organization Organization? @relation(fields: [organizationId], references: [id], name:"organization")  
+    warehouseId String?      
+    warehouse Warehouse? @relation(fields: [warehouseId], references: [id], name:"warehouse")  
+
+purchaseOrderItems PurchaseOrderItem[] @relation("purchaseOrder")  
+      dateCreated DateTime @default(now())
+      dateUpdated DateTime @updatedAt  @default(now())
+      @@allow("all", true)
+}

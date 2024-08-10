@@ -1,0 +1,18 @@
+
+ import "./purchaseOrder.zmodel"  
+ import "./masterTemplate.zmodel"  
+
+model PurchaseOrderItem {
+
+    id        String    @id @default(uuid())  
+    quantity  Float?       
+    status    String?      
+    purchaseOrderId String?      
+    purchaseOrder PurchaseOrder? @relation(fields: [purchaseOrderId], references: [id], name:"purchaseOrder")  
+    masterTemplateId String?      
+    masterTemplate MasterTemplate? @relation(fields: [masterTemplateId], references: [id], name:"masterTemplate")  
+
+dateCreated DateTime @default(now())
+      dateUpdated DateTime @updatedAt  @default(now())
+      @@allow("all", true)
+}

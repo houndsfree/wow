@@ -1,0 +1,14 @@
+
+ import "./masterTemplate.zmodel"  
+
+model TemplateLabel {
+
+    id        String    @id @default(uuid())  
+    label     String?      
+    masterTemplateId String?      
+    masterTemplate MasterTemplate? @relation(fields: [masterTemplateId], references: [id], name:"masterTemplate")  
+
+dateCreated DateTime @default(now())
+      dateUpdated DateTime @updatedAt  @default(now())
+      @@allow("all", true)
+}

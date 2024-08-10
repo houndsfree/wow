@@ -1,0 +1,24 @@
+
+ import "./user.zmodel"  
+ import "./organizationMember.zmodel"  
+ import "./masterTemplate.zmodel"  
+ import "./warehouse.zmodel"  
+ import "./purchaseOrder.zmodel"  
+ import "./workOrder.zmodel"  
+
+model Organization {
+
+    id        String    @id @default(uuid())  
+    name      String?      
+    ownerId   String?      
+    owner     User?      @relation(fields: [ownerId], references: [id], name:"owner")  
+
+organizationMembers OrganizationMember[] @relation("organization")  
+    masterTemplates MasterTemplate[] @relation("organization")  
+    warehouses Warehouse[] @relation("organization")  
+    purchaseOrders PurchaseOrder[] @relation("organization")  
+    workOrders WorkOrder[] @relation("organization")  
+      dateCreated DateTime @default(now())
+      dateUpdated DateTime @updatedAt  @default(now())
+      @@allow("all", true)
+}

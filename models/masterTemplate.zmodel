@@ -1,0 +1,21 @@
+
+ import "./organization.zmodel"  
+ import "./templateLabel.zmodel"  
+ import "./purchaseOrderItem.zmodel"  
+ import "./stockItem.zmodel"  
+
+model MasterTemplate {
+
+    id        String    @id @default(uuid())  
+    name      String?      
+    description String?      
+    organizationId String?      
+    organization Organization? @relation(fields: [organizationId], references: [id], name:"organization")  
+
+templateLabels TemplateLabel[] @relation("masterTemplate")  
+    purchaseOrderItems PurchaseOrderItem[] @relation("masterTemplate")  
+    stockItems StockItem[] @relation("masterTemplate")  
+      dateCreated DateTime @default(now())
+      dateUpdated DateTime @updatedAt  @default(now())
+      @@allow("all", true)
+}
