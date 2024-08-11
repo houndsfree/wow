@@ -29,7 +29,8 @@ export default function MasterTemplatesPage() {
   }
 
   const handleSubmit = async (values: any) => {
-    if (!user?.roles?.some(role => role.name === 'admin')) {
+    const canCreate = user?.attributes?.some(attr => attr.key === 'canCreateMasterTemplate')
+    if (!canCreate) {
       enqueueSnackbar('You are not authorized to create a master template', {
         variant: 'error',
       })

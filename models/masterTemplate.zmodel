@@ -19,4 +19,5 @@ model MasterTemplate {
     @@allow("create", auth().roles?[name == 'admin'] || auth().attributes?[key == 'canCreateMasterTemplate'])
     @@allow("update", auth().roles?[name == 'admin'] || auth().attributes?[key == 'canUpdateMasterTemplate'])
     @@allow("delete", auth().roles?[name == 'admin'] || auth().attributes?[key == 'canDeleteMasterTemplate'])
+    @@allow("read", auth().attributes.contains(this.organizationId) || auth().roles?[name == 'admin'])
 }
