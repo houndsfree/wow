@@ -1,0 +1,16 @@
+// import './[name].zmodel' - Don't forget to import relations if you need any
+
+model Policy {
+  id                   String   @id @default(uuid())
+  name                 String
+  description          String
+  subjectAttributes    String[]
+  objectAttributes     String[]
+  environmentAttributes String[]
+  conditions           String[]
+  effect               String
+  dateCreated          DateTime @default(now())
+  dateUpdated          DateTime @updatedAt @default(now())
+
+  @@allow("all", true)
+}

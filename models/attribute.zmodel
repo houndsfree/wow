@@ -1,0 +1,14 @@
+// import './[name].zmodel' - Don't forget to import relations if you need any
+
+model Attribute {
+  id             String   @id @default(uuid())
+  name           String
+  value          String
+  subjectId      String
+  objectId       String
+  environmentId  String
+  dateCreated    DateTime @default(now())
+  dateUpdated    DateTime @updatedAt @default(now())
+
+  @@allow("all", true)
+}

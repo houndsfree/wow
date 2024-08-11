@@ -13,17 +13,24 @@ export default function RegisterPage() {
   const { enqueueSnackbar } = useSnackbar()
 
   const [form] = Form.useForm()
-
   const [isLoading, setLoading] = useState(false)
 
-  const { mutateAsync: registerUser } =
-    Api.authentication.register.useMutation()
+  const { mutateAsync: registerUser } = Api.authentication.register.useMutation()
+  const { mutateAsync: assignAttributes } = Api.attribute.assign.useMutation()
 
   const handleSubmit = async (values: Partial<User>) => {
     setLoading(true)
 
     try {
-      await registerUser(values)
+      const user = await registerUser(values)
+
+      // Assuming `attributes` are passed from the invitation process and available in `values`
+      if (values.attributes) {
+        await assignAttributes({
+          userId: user.id,
+          attributes: values.attributes,
+        })
+      }
 
       signIn('credentials', {
         ...values,
