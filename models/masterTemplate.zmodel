@@ -1,21 +1,22 @@
-
- import "./organization.zmodel"  
- import "./templateLabel.zmodel"  
- import "./purchaseOrderItem.zmodel"  
- import "./stockItem.zmodel"  
+import "./organization.zmodel";
+import "./templateLabel.zmodel";
+import "./purchaseOrderItem.zmodel";
+import "./stockItem.zmodel";
 
 model MasterTemplate {
+    id              String    @id @default(uuid())
+    name            String?
+    description     String?
+    organizationId  String?
+    organization    Organization? @relation(fields: [organizationId], references: [id], name: "organization")
 
-    id        String    @id @default(uuid())  
-    name      String?      
-    description String?      
-    organizationId String?      
-    organization Organization? @relation(fields: [organizationId], references: [id], name:"organization")  
+    templateLabels  TemplateLabel[] @relation("masterTemplate")
+    purchaseOrderItems PurchaseOrderItem[] @relation("masterTemplate")
+    stockItems      StockItem[] @relation("masterTemplate")
+    dateCreated     DateTime @default(now())
+    dateUpdated     DateTime @updatedAt @default(now())
 
-templateLabels TemplateLabel[] @relation("masterTemplate")  
-    purchaseOrderItems PurchaseOrderItem[] @relation("masterTemplate")  
-    stockItems StockItem[] @relation("masterTemplate")  
-      dateCreated DateTime @default(now())
-      dateUpdated DateTime @updatedAt  @default(now())
-      @@allow("all", true)
+    @@allow("create", auth().roles?[name == 'admin'] || auth().attributes?[key == 'canCreateMasterTemplate'])
+    @@allow("update", auth().roles?[name == 'admin'] || auth().attributes?[key == 'canUpdateMasterTemplate'])
+    @@allow("delete", auth().roles?[name == 'admin'] || auth().attributes?[key == 'canDeleteMasterTemplate'])
 }

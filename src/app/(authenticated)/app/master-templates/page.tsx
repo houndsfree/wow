@@ -1,15 +1,13 @@
 'use client'
 
 import { useState } from 'react'
-import { Typography, Form, Input, Button, Select, Spin } from 'antd'
+import { Typography, Form, Input, Button, Select } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 const { Title, Text } = Typography
 const { Option } = Select
 import { useUserContext } from '@/core/context'
 import { useRouter, useParams } from 'next/navigation'
-import { useUploadPublic } from '@/core/hooks/upload'
 import { useSnackbar } from 'notistack'
-import dayjs from 'dayjs'
 import { Api } from '@/core/trpc'
 import { PageLayout } from '@/designSystem/layouts/Page.layout'
 
@@ -31,6 +29,13 @@ export default function MasterTemplatesPage() {
   }
 
   const handleSubmit = async (values: any) => {
+    if (!user?.roles?.some(role => role.name === 'admin')) {
+      enqueueSnackbar('You are not authorized to create a master template', {
+        variant: 'error',
+      })
+      return
+    }
+
     setLoading(true)
     try {
       await createMasterTemplate({
