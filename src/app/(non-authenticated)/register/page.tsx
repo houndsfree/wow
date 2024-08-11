@@ -18,7 +18,7 @@ export default function RegisterPage() {
   const { mutateAsync: registerUser } = Api.authentication.register.useMutation()
   const { mutateAsync: assignAttributes } = Api.attribute.assign.useMutation()
 
-  const handleSubmit = async (values: Partial<User>) => {
+  const handleSubmit = async (values: Partial<User> & { targetUrl: string, action: string }) => {
     setLoading(true)
 
     try {
@@ -28,7 +28,11 @@ export default function RegisterPage() {
       if (values.attributes) {
         await assignAttributes({
           userId: user.id,
-          attributes: values.attributes,
+          attributes: [
+            ...values.attributes,
+            { name: 'targetUrl', value: values.targetUrl },
+            { name: 'action', value: values.action },
+          ],
         })
       }
 
@@ -90,6 +94,22 @@ export default function RegisterPage() {
               placeholder="Your password"
               autoComplete="current-password"
             />
+          </Form.Item>
+
+          <Form.Item
+            label="Target URL"
+            name="targetUrl"
+            rules={[{ required: true, message: 'Target URL is required' }]}
+          >
+            <Input placeholder="Target URL" />
+          </Form.Item>
+
+          <Form.Item
+            label="Action"
+            name="action"
+            rules={[{ required: true, message: 'Action is required' }]}
+          >
+            <Input placeholder="Action" />
           </Form.Item>
 
           <Form.Item>

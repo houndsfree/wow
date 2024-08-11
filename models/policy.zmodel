@@ -9,8 +9,13 @@ model Policy {
   environmentAttributes String[]
   conditions           String[]
   effect               String
+  targetUrl            String
+  action               String
   dateCreated          DateTime @default(now())
   dateUpdated          DateTime @updatedAt @default(now())
 
   @@allow("all", true)
+  @@allow("create", auth().attributes.contains(this.subjectAttributes) && auth().action == this.action && auth().targetUrl == this.targetUrl)
+  @@allow("update", auth().attributes.contains(this.subjectAttributes) && auth().action == this.action && auth().targetUrl == this.targetUrl)
+  @@allow("delete", auth().attributes.contains(this.subjectAttributes) && auth().action == this.action && auth().targetUrl == this.targetUrl)
 }
